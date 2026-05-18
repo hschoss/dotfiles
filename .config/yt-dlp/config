@@ -1,0 +1,35 @@
+# Prefer 480p or lower resolutions
+-f bestvideo[height<=?480]+bestaudio/best
+
+# Save files in ~/ressourcen with title, uploader, date, and extension
+-o ~/ressourcen/%(uploader)s/%(upload_date>%Y-%m-%d)s_%(title).200B.%(ext)s
+
+# --- Video/Audio formats ---
+# Prefer best video + best audio, fallback gracefully
+-f bestvideo[height<=?480]+bestaudio/best
+
+# --- Audio extraction (when -x is passed) ---
+--audio-format mp3
+--audio-quality 0
+
+# --- Subtitles ---
+--write-auto-subs
+--sub-langs en.* --convert-subs srt
+
+# --- Networking ---
+--concurrent-fragments 8
+--throttled-rate 100K
+
+# --- Resume / retries ---
+--continue
+--ignore-errors
+--retries infinite
+--fragment-retries infinite
+
+# --- SponsorBlock integration ---
+--sponsorblock-remove all
+
+# --- Progress ---
+--progress
+--console-title
+--newline
