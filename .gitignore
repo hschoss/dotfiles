@@ -1,0 +1,64 @@
+# Secrets and credentials
+.ssh/
+id_rsa*
+id_ed25519*
+.gnupg/
+.kube/config
+.aws/
+.azure/
+.netrc
+.npmrc
+.pypirc
+.config/sops
+
+# Browser profiles
+.config/chromium/
+.config/google-chrome/
+.config/BraveSoftware/
+.mozilla/
+
+# Cloud, sync, and auth tooling.
+.config/rclone/
+/rclone
+.config/sops/
+.config/gh/hosts.yml
+.config/Nextcloud/
+.config/autostart/Nextcloud.desktop
+gh/config.yml
+hel/repositories.yaml
+
+# Local IPC/session secrets.
+.config/pulse/
+/pulse
+
+# Application state, logs, caches, generated configs, and machine-local settings.
+.config/obs-studio/
+/obs-studio
+.config/go/telemetry/
+/go
+.config/dconf/
+/dconf
+.config/libreoffice/
+.config/Kiwix/
+/Kiwix
+.config/QtProject.conf
+/QtProject.conf
+.config/digikamrc
+.config/digikam_systemrc
+/digikamrc
+/digikam_systemrc
+.config/helm/repositories.lock
+
+# Backups and runtime output.
+*.bak
+*.backup
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+*.key
+*.pem
+*.swp
+*.swo
+.viminfo
