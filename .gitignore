@@ -62,3 +62,9 @@ hel/repositories.yaml
 *.swp
 *.swo
 .viminfo
+
+# Private local repository and auth state.
+.dotfiles-local/
+.config/immich/
+/immich
+packages/git/.config/gh/hosts.yml
