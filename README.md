@@ -1,23 +1,17 @@
-# Dotfiles
+# dotfiles
 
-my dotfiles are managed with [GNU Stow](https://www.gnu.org/software/stow/).
+my dotfiles are managed with [GNU Stow](https://www.gnu.org/software/stow/) and
+the structure is inspired by Anish Athalye's [Managing your dotfiles](https://anishathalye.com/managing-your-dotfiles/). You can use this
+portable configuration on all Linux systems with bash, vim, tmux and git.
 
-The structure of my dotfiles is motivated by thhis Anish Athalye [post](https://anishathalye.com/managing-your-dotfiles/). This configuration is safe to use on all Linux systems with bash, vim, tmux and git.
+My machine-specific settings live in the
+[dotfiles-local](https://github.com/hschoss/dotfiles) repo, which extends this
+base configuration. 
 
-my machine-specific and private settings are in the [dotfiles-local](https://github.com/hschoss/dotfiles) repo, which extends this base configuration. 
+## Installation
 
-## Packages
-- `bash`: `.bashrc`, `.bash_profile`, `.inputrc`, `bash/`, and `shell/`
-- `tmux`: `.tmux.conf`
-- `vim`: `.vimrc`
-- `nvim`: `.config/nvim/`
-- `git`: `.config/git/` and safe `.config/gh/config.yml`
-- `cli`: portable CLI config such as `yt-dlp`
-- `server`: minimal server-safe package placeholder
-
-## first: dry run
-
-These commands only simulate Stow operations. If they work you can apply them.
+Before applying any configuration, run a dry run first. These commands simulate
+the Stow operations without changing files:
 
 ```sh
 ./scripts/install-common.sh --dry-run
@@ -25,38 +19,32 @@ These commands only simulate Stow operations. If they work you can apply them.
 ./scripts/install-server.sh --dry-run
 ```
 
-## next: apply the config
-
-Run one profile after checking the dry-run output:
+After checking the dry-run output you can actually apply the profile you want.
+Use only the profile that matches the machine you are setting up.
 
 ```sh
 ./scripts/install-common.sh
 ./scripts/install-dev.sh
 ./scripts/install-server.sh
 ```
+Run the check script to validate the repo setup:
 
-## eventually: unstow
+```
+./scripts/check.sh
+```
+
+You can remove the managed symlinks with this script. Please dry-run first.
 
 ```sh
 ./scripts/unstow-all.sh --dry-run
 ./scripts/unstow-all.sh
 ```
 
-# 
-```sh
-./scripts/check.sh
-```
-
-The check script prints broken symlinks inside the repo, runs Stow simulations for common/dev/server profiles, prints the package tree, and shows Git status.
-
 ## Making local Customizations
 
-You can make local customizations for some programs by editing these files:
-
+You can add local and machine-specific customization without changing this base
+repository. The following files are sourced when present:
 - `~/.bashrc` sources `~/.bashrc.local`
 - `~/.bash_profile` sources `~/.bash_profile.local`
 - `~/.tmux.conf` sources `~/.tmux.conf.local`
 - `~/.vimrc` sources `~/.vimrc.local`
-- shell startup also sources readable `*.sh` files from `~/.config/shell/local/` and `~/.local/share/dotfiles-local/`
-
-

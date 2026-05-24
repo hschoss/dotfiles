@@ -19,7 +19,7 @@ packages="bash tmux vim nvim git cli"
 printf "Stowing dev packages: %s\n" "$packages"
 
 if [ "$dry_run" = true ]; then
-    stow --dir=packages --target="$HOME" --simulate --verbose $packages
+    stow --no-folding --dir=packages --target="$HOME" --simulate --verbose $packages
 else
-    stow --dir=packages --target="$HOME" $packages
+    stow --no-folding --dir=packages --target="$HOME" $packages
 fi
