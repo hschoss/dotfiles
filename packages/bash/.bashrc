@@ -6,12 +6,28 @@ dot_source() {
     [ -r "$DOTFILES_HOME/$1" ] && source "$DOTFILES_HOME/$1"
 }
 
+source_private() {
+    [ -f "$1" ] || return 0
+    [ -r "$1" ] || return 0
+    [ -O "$1" ] || return 0
+
+    local mode group_perm other_perm
+    mode=$(stat -c %a "$1" 2>/dev/null) || return 0
+    group_perm=${mode: -2:1}
+    other_perm=${mode: -1}
+    case "$group_perm$other_perm" in
+        [2367]?|?[2367]) return 0 ;;
+    esac
+
+    source "$1"
+}
+
 # Functions
 dot_source shell/functions.sh
 
 # Local customizations before shared settings
-[ -r "$HOME/.shell_local_before" ] && source "$HOME/.shell_local_before"
-[ -r "$HOME/.bashrc_local_before" ] && source "$HOME/.bashrc_local_before"
+source_private "$HOME/.shell_local_before"
+source_private "$HOME/.bashrc_local_before"
 
 # Settings
 dot_source bash/settings.bash
@@ -28,19 +44,18 @@ dot_source bash/prompt.bash
 dot_source bash/plugins.bash
 
 # Local customizations after shared settings
-[ -r "$HOME/.shell_local_after" ] && source "$HOME/.shell_local_after"
-[ -r "$HOME/.bashrc_local_after" ] && source "$HOME/.bashrc_local_after"
+source_private "$HOME/.shell_local_after"
+source_private "$HOME/.bashrc_local_after"
 
 # Private customizations, intentionally not checked in
-[ -r "$HOME/.shell_private" ] && source "$HOME/.shell_private"
+source_private "$HOME/.shell_private"
 
 for local_shell_file in "$HOME/.config/shell/local/"*.sh "$HOME/.local/share/dotfiles-local/"*.sh; do
-    [ -r "$local_shell_file" ] && source "$local_shell_file"
+    source_private "$local_shell_file"
 done
 
-if [ -f "$HOME/.bashrc.local" ]; then
-    . "$HOME/.bashrc.local"
-fi
+source_private "$HOME/.bashrc.local"
 
 unset local_shell_file
+unset -f source_private
 unset -f dot_source

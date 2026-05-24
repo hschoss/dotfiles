@@ -25,7 +25,17 @@ id_ed25519*
 .config/Nextcloud/
 .config/autostart/Nextcloud.desktop
 gh/config.yml
-hel/repositories.yaml
+.config/helm/repositories.yaml
+.config/helm/repositories.lock
+.config/kube/
+.kube/
+.config/borg/
+.borg/
+.config/restic/
+.restic/
+.config/cat_installer/
+.config/gtk-3.0/bookmarks
+.config/mimeapps.list
 
 # Local IPC/session secrets.
 .config/pulse/
@@ -59,9 +69,20 @@ hel/repositories.yaml
 *~
 *.key
 *.pem
+*.p12
+*.pfx
 *.swp
 *.swo
 .viminfo
+restic-password*
+borg-passphrase*
+*.sqlite
+*.db
+*.dump
+*.sql
+.env
+.env.*
+*.env
 
 # Private local repository and auth state.
 .dotfiles-local/

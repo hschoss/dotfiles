@@ -93,15 +93,22 @@ vim.keymap.set('n', 'k', 'gk')
 
 -- 4. Install lazy.nvim plugin manager if not present
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazy_commit = "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a"
 if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
+    local clone_output = vim.fn.system({
         "git",
         "clone",
         "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
         lazypath,
     })
+    if vim.v.shell_error ~= 0 then
+        error("Failed to clone lazy.nvim: " .. clone_output)
+    end
+end
+local checkout_output = vim.fn.system({ "git", "-C", lazypath, "checkout", "--detach", lazy_commit })
+if vim.v.shell_error ~= 0 then
+    error("Failed to pin lazy.nvim: " .. checkout_output)
 end
 vim.opt.rtp:prepend(lazypath)
 
