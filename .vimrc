@@ -43,10 +43,10 @@ set autoread               " reload changed files
 
 " CLIPBOARD
 if has('clipboard')
-    set clipboard=unnamedplus
+ set clipboard=unnamedplus
 elseif executable('wl-copy')
-    nnoremap <silent> yy yy:call system('wl-copy', @")<CR>
-    xnoremap <silent> y y:call system('wl-copy', @")<CR>
+ nnoremap <silent> yy yy:call system('wl-copy', @")<CR>
+ xnoremap <silent> y y:call system('wl-copy', @")<CR>
 endif
 
 " MARKDOWN
@@ -73,7 +73,7 @@ augroup FiletypeSettings
         \ setlocal tabstop=2 shiftwidth=2 softtabstop=2
         \ expandtab
   autocmd FileType markdown
-        \ setlocal wrap linebreak spell colorcolumn=80
+        \ setlocal wrap linebreak colorcolumn=80 textwidth=78
 augroup END
 
 
