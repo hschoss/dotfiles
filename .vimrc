@@ -42,11 +42,52 @@ set hidden                 " allow hidden buffers
 set autoread               " reload changed files
 
 " CLIPBOARD
-if has('clipboard')
- set clipboard=unnamedplus
+if has('clipboard_provider') && executable('wl-copy') && executable('wl-paste')
+    function! s:WlCopy(reg, type, lines) abort
+        let l:cmd = ['wl-copy'] + (a:reg ==# '*' ? ['--primary'] : [])
+        let l:text = join(a:lines, "\n") . (a:type ==# 'V' ? "\n" : "")
+
+        let l:job = job_start(l:cmd, {
+            \ 'in_io': 'pipe',
+            \ 'out_io': 'null',
+            \ 'err_io': 'null',
+            \ })
+
+        if job_status(l:job) !=# 'fail'
+            call ch_sendraw(l:job, l:text)
+            call ch_close_in(l:job)
+        endif
+    endfunction
+
+    function! s:WlPaste(reg) abort
+        let l:cmd = ['wl-paste']
+            \ + (a:reg ==# '*' ? ['--primary'] : [])
+            \ + ['--type', 'text/plain;charset=utf-8']
+
+        return ['', systemlist(l:cmd)]
+    endfunction
+
+    let v:clipproviders['wl_clipboard'] = {
+        \ 'available': {-> executable('wl-copy') && executable('wl-paste')},
+        \ 'copy': {
+        \   '+': function('s:WlCopy'),
+        \   '*': function('s:WlCopy'),
+        \ },
+        \ 'paste': {
+        \   '+': function('s:WlPaste'),
+        \   '*': function('s:WlPaste'),
+        \ },
+        \ }
+
+    set clipmethod=wl_clipboard,wayland,x11
+    set clipboard=unnamedplus
+
+elseif has('clipboard')
+    set clipboard=unnamedplus
+
 elseif executable('wl-copy')
- nnoremap <silent> yy yy:call system('wl-copy', @")<CR>
- xnoremap <silent> y y:call system('wl-copy', @")<CR>
+    nnoremap <silent> yy yy:call system('wl-copy', @")<CR>
+    xnoremap <silent> y y:call system('wl-copy', @")<CR>
 endif
 
 " MARKDOWN
