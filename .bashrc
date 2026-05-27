@@ -1,6 +1,17 @@
 # ~/.bashrc
 
-DOTFILES_HOME="${DOTFILES_HOME:-$HOME}"
+if [ -z "${DOTFILES_HOME:-}" ]; then
+    dotfiles_source="${BASH_SOURCE[0]:-$0}"
+    while [ -L "$dotfiles_source" ]; do
+        dotfiles_dir=$(CDPATH= cd -- "$(dirname -- "$dotfiles_source")" && pwd)
+        dotfiles_target=$(readlink "$dotfiles_source")
+        case "$dotfiles_target" in
+            /*) dotfiles_source="$dotfiles_target" ;;
+            *) dotfiles_source="$dotfiles_dir/$dotfiles_target" ;;
+        esac
+    done
+    DOTFILES_HOME=$(CDPATH= cd -- "$(dirname -- "$dotfiles_source")" && pwd)
+fi
 
 dot_source() {
     [ -r "$DOTFILES_HOME/$1" ] && source "$DOTFILES_HOME/$1"
@@ -22,21 +33,21 @@ source_private() {
     source "$1"
 }
 
-# Functions
+# functions
 dot_source shell/functions.sh
 
-# Local customizations before shared settings
+# local customizations before shared settings
 source_private "$HOME/.shell_local_before"
 source_private "$HOME/.bashrc_local_before"
 
-# Settings
+# settings
 dot_source bash/settings.bash
 
 # PATH setup and external tool settings
 dot_source shell/bootstrap.sh
 dot_source shell/external.sh
 
-# Aliases
+# aliases
 dot_source shell/aliases.sh
 
 # Prompt and interactive plugins
@@ -57,5 +68,8 @@ done
 source_private "$HOME/.bashrc.local"
 
 unset local_shell_file
+unset dotfiles_dir
+unset dotfiles_source
+unset dotfiles_target
 unset -f source_private
 unset -f dot_source

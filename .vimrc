@@ -1,6 +1,7 @@
 " CORE
 set nocompatible            " vim mode
 filetype plugin indent on   " filetype setup
+colorscheme elflord         " high contrast
 syntax on                   " syntax colors
 set encoding=utf-8          " only UTF-8
 set shortmess+=I            " hide intro message
