@@ -19,7 +19,7 @@ packages="bash tmux vim git"
 printf "Stowing common packages: %s\n" "$packages"
 
 if [ "$dry_run" = true ]; then
-    stow --no-folding --dir=packages --target="$HOME" --simulate --verbose $packages
+    stow --no-folding --target="$HOME" --simulate --verbose $packages
 else
-    stow --no-folding --dir=packages --target="$HOME" $packages
+    stow --no-folding --target="$HOME" $packages
 fi

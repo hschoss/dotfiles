@@ -8,16 +8,13 @@ printf "Broken symlinks in repo:\n"
 find . -xtype l -print
 
 printf "\nStow simulate: common\n"
-stow --dir=packages --target="$HOME" --simulate --verbose bash tmux vim git
+stow --target="$HOME" --simulate --verbose bash tmux vim git
 
 printf "\nStow simulate: dev\n"
-stow --dir=packages --target="$HOME" --simulate --verbose bash tmux vim nvim git cli
+stow --target="$HOME" --simulate --verbose bash tmux vim nvim git cli
 
 printf "\nStow simulate: server\n"
-stow --dir=packages --target="$HOME" --simulate --verbose bash tmux vim git server
-
-printf "\nPackage tree:\n"
-find packages -maxdepth 4 -print | sort
+stow --target="$HOME" --simulate --verbose bash tmux vim git server
 
 printf "\nGit status:\n"
 git status --short --untracked-files=all

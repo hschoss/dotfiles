@@ -19,7 +19,7 @@ packages="bash tmux vim git server"
 printf "Stowing server packages: %s\n" "$packages"
 
 if [ "$dry_run" = true ]; then
-    stow --dir=packages --target="$HOME" --simulate --verbose $packages
+    stow --target="$HOME" --simulate --verbose $packages
 else
-    stow --dir=packages --target="$HOME" $packages
+    stow --target="$HOME" $packages
 fi

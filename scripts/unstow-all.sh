@@ -15,11 +15,11 @@ if [ "$#" -ne 0 ]; then
     exit 2
 fi
 
-packages="bash tmux vim nvim git cli server"
+packages="bash tmux vim git server"
 printf "Unstowing public packages: %s\n" "$packages"
 
 if [ "$dry_run" = true ]; then
-    stow --dir=packages --target="$HOME" --delete --simulate --verbose $packages
+    stow --target="$HOME" --delete --simulate --verbose $packages
 else
-    stow --dir=packages --target="$HOME" --delete $packages
+    stow --target="$HOME" --delete $packages
 fi

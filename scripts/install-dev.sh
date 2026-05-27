@@ -15,11 +15,11 @@ if [ "$#" -ne 0 ]; then
     exit 2
 fi
 
-packages="bash tmux vim nvim git cli"
+packages="bash tmux vim nvim git"
 printf "Stowing dev packages: %s\n" "$packages"
 
 if [ "$dry_run" = true ]; then
-    stow --no-folding --dir=packages --target="$HOME" --simulate --verbose $packages
+    stow --no-folding --target="$HOME" --simulate --verbose $packages
 else
-    stow --no-folding --dir=packages --target="$HOME" $packages
+    stow --no-folding --target="$HOME" $packages
 fi
