@@ -10,3 +10,9 @@ export PAGER=less
 export SAGE_PNG_VIEWER=imv
 
 set -o vi
+
+
+# Reload readline config for interactive bash
+if [[ $- == *i* ]]; then
+  bind -f "$INPUTRC"
+fi

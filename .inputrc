@@ -1,21 +1,22 @@
 # ~/.inputrc
 
 set editing-mode vi
-
-# Do not show "(ins)" / "(cmd)" in prompt
 set show-mode-in-prompt off
-
-# Clear screen
-"\C-l": clear-screen
+set bell-style none
 
 # Completion
 set completion-ignore-case on
 set show-all-if-ambiguous on
 set menu-complete-display-prefix on
 
-# History search with arrow keys
+# vi insert mode
+set keymap vi-insert
+"\C-l": clear-screen
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Quiet terminal
-set bell-style none
+# vi command mode
+set keymap vi-command
+"\C-l": clear-screen
+"\e[A": history-search-backward
+"\e[B": history-search-forward
