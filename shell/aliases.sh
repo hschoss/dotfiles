@@ -3,6 +3,11 @@ alias ls='ls --color=auto'
 alias sl='ls --color=auto'
 alias grep='grep --color'
 
+
+alias ais='ollama run qwen2.5-coder:7b'
+alias aib='ollama run qwen3-coder:30b'
+
+
 # protection against overwriting
 alias cp='cp -i'
 alias mv='mv -i'
