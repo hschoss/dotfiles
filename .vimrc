@@ -115,7 +115,7 @@ augroup FiletypeSettings
         \ expandtab
   autocmd FileType markdown
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
-  autocmd FileType rmd, rmarkdown
+  autocmd FileType rmd,rmarkdown
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
 
 augroup END
@@ -138,7 +138,15 @@ nnoremap <Leader>tt a<C-r>=strftime('%H:%M')<CR><Esc>
 nnoremap <Leader>dt a<C-r>=strftime('%Y-%m-%d %H:%M')<CR><Esc>
 nnoremap <Leader>ts a<C-r>=strftime('%Y%m%d_%H%M%S')<CR><Esc>
 
-nnoremap <leader>r :w<CR>:!Rscript -e "rmarkdown::render('%:p', output_format='pdf_document')" && zathura "%:r.pdf" &<CR>
+" nnoremap <leader>r :w<CR>:!Rscript -e "rmarkdown::render('%:p', output_format='pdf_document')" && zathura "%:r.pdf" &<CR>
+nnoremap <leader>r :w<CR>:!mkdir -p "%:p:h/output" &&
+      \ Rscript -e "rmarkdown::render(
+      \ '%:p',
+      \ output_format='pdf_document',
+      \ output_dir='%:p:h/output',
+      \ clean=TRUE
+      \ )" &&
+      \ zathura "%:p:h/output/%:t:r.pdf" &<CR>
 
 nnoremap <leader><leader> :e#<CR>
 

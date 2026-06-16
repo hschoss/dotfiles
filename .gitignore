@@ -1,4 +1,4 @@
-# Secrets and credentials
+# secrets
 .ssh/
 id_rsa*
 id_ed25519*
@@ -11,13 +11,13 @@ id_ed25519*
 .pypirc
 .config/sops
 
-# Browser profiles
+# browser profiles
 .config/chromium/
 .config/google-chrome/
 .config/BraveSoftware/
 .mozilla/
 
-# Cloud, sync, and auth tooling.
+# cloud, sync, and auth tooling.
 .config/rclone/
 /rclone
 .config/sops/
@@ -37,11 +37,11 @@ gh/config.yml
 .config/gtk-3.0/bookmarks
 .config/mimeapps.list
 
-# Local IPC/session secrets.
+# local IPC/session secrets.
 .config/pulse/
 /pulse
 
-# Application state, logs, caches, generated configs, and machine-local settings.
+# application state, logs, caches, generated configs, and machine-local settings.
 .config/obs-studio/
 /obs-studio
 .config/go/telemetry/
@@ -59,7 +59,7 @@ gh/config.yml
 /digikam_systemrc
 .config/helm/repositories.lock
 
-# Backups and runtime output.
+# backups and runtime output.
 *.bak
 *.backup
 *.log
@@ -84,8 +84,14 @@ borg-passphrase*
 .env.*
 *.env
 
-# Private local repository and auth state.
+# private local repository and auth state.
 .dotfiles-local/
 .config/immich/
 /immich
 packages/git/.config/gh/hosts.yml
+
+# local overrides
+.bashrc.local
+.zshrc.local
+.profile.local
+.shell_private

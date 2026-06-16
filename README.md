@@ -8,7 +8,7 @@ My machine-specific settings live in the
 [dotfiles-local](https://github.com/hschoss/dotfiles) repo, which extends this
 base configuration. 
 
-## Installation
+## installation
 
 Before applying any configuration, run a dry run first. These commands simulate
 the Stow operations without changing files:

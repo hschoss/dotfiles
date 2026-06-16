@@ -3,10 +3,9 @@ alias ls='ls --color=auto'
 alias sl='ls --color=auto'
 alias grep='grep --color'
 
-
+# local llm config
 alias ais='ollama run qwen2.5-coder:7b'
 alias aib='ollama run qwen3-coder:30b'
-
 
 # protection against overwriting
 alias cp='cp -i'

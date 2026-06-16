@@ -1,7 +1,5 @@
 # ~/.bashrc
 
-alias scan='./buero/script/scan-to-review-pdf.sh'
-
 
 if [ -z "${DOTFILES_HOME:-}" ]; then
     dotfiles_source="${BASH_SOURCE[0]:-$0}"
@@ -53,15 +51,15 @@ dot_source shell/external.sh
 # aliases
 dot_source shell/aliases.sh
 
-# Prompt and interactive plugins
+# prompt and interactive plugins
 dot_source bash/prompt.bash
 dot_source bash/plugins.bash
 
-# Local customizations after shared settings
+# local customizations after shared settings
 source_private "$HOME/.shell_local_after"
 source_private "$HOME/.bashrc_local_after"
 
-# Private customizations, intentionally not checked in
+# private customizations, intentionally not checked in
 source_private "$HOME/.shell_private"
 
 for local_shell_file in "$HOME/.config/shell/local/"*.sh "$HOME/.local/share/dotfiles-local/"*.sh; do
@@ -76,3 +74,5 @@ unset dotfiles_source
 unset dotfiles_target
 unset -f source_private
 unset -f dot_source
+
+[ -f ~/.bashrc.local ] && . ~/.bashrc.local
