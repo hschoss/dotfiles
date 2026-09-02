@@ -13,6 +13,9 @@ alias mv='mv -i'
 
 alias info="info --vi-keys"
 
+# zathura window and terminal usage
+alias zathura='zathura --fork'
+
 # Check if a file contains non-ascii characters
 nonascii() {
     LC_ALL=C grep -n '[^[:print:][:space:]]' "${@}"

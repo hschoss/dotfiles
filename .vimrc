@@ -115,6 +115,8 @@ augroup FiletypeSettings
         \ expandtab
   autocmd FileType markdown
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
+  autocmd FileType tex
+        \ setlocal wrap linebreak colorcolumn=80 textwidth=78
   autocmd FileType rmd,rmarkdown
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
 
@@ -138,17 +140,95 @@ nnoremap <Leader>tt a<C-r>=strftime('%H:%M')<CR><Esc>
 nnoremap <Leader>dt a<C-r>=strftime('%Y-%m-%d %H:%M')<CR><Esc>
 nnoremap <Leader>ts a<C-r>=strftime('%Y%m%d_%H%M%S')<CR><Esc>
 
-" nnoremap <leader>r :w<CR>:!Rscript -e "rmarkdown::render('%:p', output_format='pdf_document')" && zathura "%:r.pdf" &<CR>
-nnoremap <leader>r :w<CR>:!mkdir -p "%:p:h/output" &&
-      \ Rscript -e "rmarkdown::render(
-      \ '%:p',
-      \ output_format='pdf_document',
-      \ output_dir='%:p:h/output',
-      \ clean=TRUE
-      \ )" &&
-      \ zathura "%:p:h/output/%:t:r.pdf" &<CR>
+
+"PDF RELATED MAPPINGS
 
 nnoremap <leader><leader> :e#<CR>
+
+function! s:ZathuraOpenOrReload(pdf) abort
+  let l:pdf = fnamemodify(a:pdf, ':p')
+
+  if !filereadable(l:pdf)
+    echoerr 'PDF nicht gefunden: ' . l:pdf
+    return
+  endif
+
+  let l:processes = system('pgrep -af zathura')
+
+  if stridx(l:processes, l:pdf) >= 0
+    return
+  endif
+
+  execute 'silent !zathura ' . shellescape(l:pdf)
+        \ . ' >/dev/null 2>&1 &'
+endfunction
+
+function! s:RenderCurrentTex() abort
+  write
+
+  let l:tex = expand('%:p')
+  let l:dir = expand('%:p:h')
+  let l:name = expand('%:t:r')
+  let l:build = l:dir . '/build'
+  let l:pdf = l:build . '/' . l:name . '.pdf'
+
+  call mkdir(l:build, 'p')
+
+  let l:command = 'latexmk -pdf -interaction=nonstopmode '
+        \ . '-file-line-error -outdir=' . shellescape(l:build)
+        \ . ' ' . shellescape(l:tex)
+
+  execute '!' . l:command
+
+  if v:shell_error == 0
+    call s:ZathuraOpenOrReload(l:pdf)
+  endif
+endfunction
+
+function! s:RenderCurrentRmd() abort
+  write
+
+  let l:rmd = expand('%:p')
+  let l:dir = expand('%:p:h')
+  let l:name = expand('%:t:r')
+  let l:output = l:dir . '/output'
+  let l:pdf = l:output . '/' . l:name . '.pdf'
+
+  call mkdir(l:output, 'p')
+
+  let l:expression = 'rmarkdown::render('
+        \ . json_encode(l:rmd)
+        \ . ', output_format = "pdf_document"'
+        \ . ', output_dir = ' . json_encode(l:output)
+        \ . ', clean = TRUE)'
+
+  let l:command = 'Rscript -e ' . shellescape(l:expression)
+
+  execute '!' . l:command
+
+  if v:shell_error == 0
+    call s:ZathuraOpenOrReload(l:pdf)
+  endif
+endfunction
+
+function! s:RenderCurrentDocument() abort
+  let l:extension = tolower(expand('%:e'))
+
+  if &filetype ==# 'tex' || l:extension ==# 'tex'
+    call s:RenderCurrentTex()
+
+  elseif &filetype ==# 'rmarkdown'
+        \ || &filetype ==# 'rmd'
+        \ || l:extension ==# 'rmd'
+    call s:RenderCurrentRmd()
+
+  else
+    echoerr 'Kein Renderer für Dateityp: ' . &filetype
+  endif
+endfunction
+
+nnoremap <leader>r <Cmd>call <SID>RenderCurrentDocument()<CR>
+
 
 " LOCAL
 if filereadable(expand("~/.vimrc.local"))
