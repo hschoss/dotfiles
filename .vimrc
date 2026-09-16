@@ -117,7 +117,7 @@ augroup FiletypeSettings
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
   autocmd FileType tex
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
-  autocmd FileType rmd,rmarkdown
+  autocmd FileType r,rmd,rmarkdown
         \ setlocal wrap linebreak colorcolumn=80 textwidth=78
 
 augroup END
@@ -139,6 +139,11 @@ nnoremap <Leader>dd a<C-r>=strftime('%Y-%m-%d')<CR><Esc>
 nnoremap <Leader>tt a<C-r>=strftime('%H:%M')<CR><Esc>
 nnoremap <Leader>dt a<C-r>=strftime('%Y-%m-%d %H:%M')<CR><Esc>
 nnoremap <Leader>ts a<C-r>=strftime('%Y%m%d_%H%M%S')<CR><Esc>
+
+nnoremap <Leader># <Cmd>put =repeat('#', 80)<CR>
+
+
+
 
 
 "PDF RELATED MAPPINGS
@@ -228,6 +233,8 @@ function! s:RenderCurrentDocument() abort
 endfunction
 
 nnoremap <leader>r <Cmd>call <SID>RenderCurrentDocument()<CR>
+
+set nowritebackup
 
 
 " LOCAL

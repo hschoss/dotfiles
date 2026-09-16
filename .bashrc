@@ -1,6 +1,5 @@
 # ~/.bashrc
 
-
 if [ -z "${DOTFILES_HOME:-}" ]; then
     dotfiles_source="${BASH_SOURCE[0]:-$0}"
     while [ -L "$dotfiles_source" ]; do

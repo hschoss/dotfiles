@@ -28,3 +28,17 @@ there="$HOME/.shell.here"
 there() {
     cd "$(readlink "${there}")" || return
 }
+
+pdf2md() {
+    if [ "$#" -ne 1 ]; then
+        printf 'Usage: pdf2md FILE.pdf\n' >&2
+        return 1
+    fi
+
+    pdf=$1
+    md="${pdf%.pdf}.md"
+
+    pdftotext -raw -enc UTF-8 "$pdf" "$md" &&
+        printf 'Created: %s\n' "$md"
+}
+
