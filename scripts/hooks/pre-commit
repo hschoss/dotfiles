@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+# pre-commit hook: block secrets in staged content.
+#
+# Enable with:
+#   git config --local core.hooksPath scripts/hooks
+
+set -eu
+
+if command -v gitleaks >/dev/null 2>&1; then
+    if ! gitleaks protect --staged --no-banner --redact; then
+        printf 'pre-commit: gitleaks found secrets in staged changes.\n' >&2
+        exit 1
+    fi
+else
+    printf 'pre-commit: gitleaks not installed; skipping scan.\n' >&2
+    printf '           install with: pacman -S gitleaks (or similar)\n' >&2
+fi

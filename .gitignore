@@ -1,65 +1,107 @@
-# secrets
-.ssh/
-id_rsa*
-id_ed25519*
-.gnupg/
-.kube/config
-.aws/
-.azure/
+# Allowlist model: everything is ignored by default. Opt files in with
+# a `!` rule. A secret dropped into the tree cannot sneak into a commit
+# just because its name is new — the only way to track it is to add it
+# here deliberately.
+#
+# Keep this list in sync with `git ls-files`.
+
+/*
+!/.gitignore
+!/.bash_profile
+!/.bashrc
+!/.inputrc
+!/.tmux.conf
+!/.vimrc
+!/LICENSE.md
+!/README.md
+!/SECURITY.md
+
+# Top-level directories that hold tracked files. The entries under them
+# selectively allowlist individual files.
+!/bash/
+!/git/
+!/scripts/
+!/server/
+!/shell/
+!/tmux/
+!/vim/
+
+bash/*
+!bash/plugins.bash
+!bash/prompt.bash
+!bash/settings.bash
+
+git/*
+!git/.config/
+git/.config/*
+!git/.config/gh/
+git/.config/gh/*
+!git/.config/gh/config.yml
+!git/.config/git/
+git/.config/git/*
+!git/.config/git/config
+!git/.config/git/ignore
+
+scripts/*
+!scripts/check.sh
+!scripts/install-common.sh
+!scripts/install-dev.sh
+!scripts/install-server.sh
+!scripts/unstow-all.sh
+!scripts/hooks/
+scripts/hooks/*
+!scripts/hooks/pre-commit
+!scripts/hooks/pre-push
+
+server/*
+!server/README.md
+
+shell/*
+!shell/aliases.sh
+!shell/bootstrap.sh
+!shell/dircolors.elflord
+!shell/dircolors.solarized
+!shell/external.sh
+!shell/functions.sh
+
+# tmux/ and vim/ are stow package roots that currently hold no files.
+# Keep them tracked as directories.
+
+# Belt-and-braces denylist in case something slips the allowlist above:
+# any file matching these names is still refused by name.
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.agekey
+*token*
+*secret*
+*credential*
+*apikey*
+*.env
+.env.*
 .netrc
 .npmrc
 .pypirc
-.config/sops
-
-# browser profiles
-.config/chromium/
-.config/google-chrome/
-.config/BraveSoftware/
-.mozilla/
-
-# cloud, sync, and auth tooling.
-.config/rclone/
-/rclone
-.config/sops/
-.config/gh/hosts.yml
-.config/Nextcloud/
-.config/autostart/Nextcloud.desktop
-gh/config.yml
-.config/helm/repositories.yaml
-.config/helm/repositories.lock
-.config/kube/
-.kube/
-.config/borg/
-.borg/
-.config/restic/
-.restic/
-.config/cat_installer/
-.config/gtk-3.0/bookmarks
-.config/mimeapps.list
-
-# local IPC/session secrets.
-.config/pulse/
-/pulse
-
-# application state, logs, caches, generated configs, and machine-local settings.
-.config/obs-studio/
-/obs-studio
-.config/go/telemetry/
-/go
-.config/dconf/
-/dconf
-.config/libreoffice/
-.config/Kiwix/
-/Kiwix
-.config/QtProject.conf
-/QtProject.conf
-.config/digikamrc
-.config/digikam_systemrc
-/digikamrc
-/digikam_systemrc
-.config/helm/repositories.lock
-
-# backups and runtime output.
+id_rsa*
+id_ed25519*
+id_ecdsa*
+hosts.yml
+rclone.conf
+auth.yml
+keys.txt
+cookie
+.git-credentials
+*.ovpn
+wg*.conf
+*.wg
+*.enc
+*.sqlite
+*.db
+*.dump
+*.sql
 *.bak
 *.backup
 *.log
@@ -67,31 +109,3 @@ gh/config.yml
 *.swp
 *.swo
 *~
-*.key
-*.pem
-*.p12
-*.pfx
-*.swp
-*.swo
-.viminfo
-restic-password*
-borg-passphrase*
-*.sqlite
-*.db
-*.dump
-*.sql
-.env
-.env.*
-*.env
-
-# private local repository and auth state.
-.dotfiles-local/
-.config/immich/
-/immich
-packages/git/.config/gh/hosts.yml
-
-# local overrides
-.bashrc.local
-.zshrc.local
-.profile.local
-.shell_private

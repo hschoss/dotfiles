@@ -22,11 +22,23 @@ source_private() {
     [ -r "$1" ] || return 0
     [ -O "$1" ] || return 0
 
-    local mode group_perm other_perm
+    local mode group_perm other_perm parent parent_mode parent_g parent_o
     mode=$(stat -c %a "$1" 2>/dev/null) || return 0
     group_perm=${mode: -2:1}
     other_perm=${mode: -1}
     case "$group_perm$other_perm" in
+        [2367]?|?[2367]) return 0 ;;
+    esac
+
+    # Reject if the file's parent directory is group/other-writable or not
+    # owned by us — otherwise an attacker who owns the parent can swap the
+    # file wholesale (TOCTOU) regardless of its own perms.
+    parent=$(dirname -- "$1")
+    [ -O "$parent" ] || return 0
+    parent_mode=$(stat -c %a "$parent" 2>/dev/null) || return 0
+    parent_g=${parent_mode: -2:1}
+    parent_o=${parent_mode: -1}
+    case "$parent_g$parent_o" in
         [2367]?|?[2367]) return 0 ;;
     esac
 
@@ -73,5 +85,3 @@ unset dotfiles_source
 unset dotfiles_target
 unset -f source_private
 unset -f dot_source
-
-[ -f ~/.bashrc.local ] && . ~/.bashrc.local

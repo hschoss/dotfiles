@@ -1,0 +1,42 @@
+; Portable git configuration.
+;
+; Machine-specific settings (user.name, user.email, user.signingkey, the
+; signers file) live in ~/.gitconfig.local and are managed by the
+; dotfiles-local repo.
+
+[include]
+	path = ~/.gitconfig.local
+
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
+[core]
+	hooksPath = ~/.config/git/hooks
+
+; SSH signing — zero-friction when you already have an SSH agent.
+; user.signingkey (e.g. "key::ssh-ed25519 AAAA...") and gpg.ssh.allowedSignersFile
+; belong in ~/.gitconfig.local.
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+
+[tag]
+	gpgsign = true
+
+[transfer]
+	fsckobjects = true
+[fetch "fsckobjects"]
+	true = true
+[receive]
+	fsckObjects = true

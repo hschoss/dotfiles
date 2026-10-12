@@ -1,5 +1,6 @@
 path_remove() {
-    PATH=$(printf '%s' "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" | sed 's/:$//')
+    PATH=$(printf '%s' "$PATH" | awk -v RS=: -v ORS=: -v drop="$1" \
+        '$0 != drop' | sed 's/:$//')
 }
 
 path_append() {

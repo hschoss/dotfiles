@@ -44,8 +44,9 @@ link_root_file() {
         if cmp -s "$source_path" "$target_path"; then
             printf "ADOPT: %s -> .dotfiles/%s\n" "$target_path" "$1"
             if [ "$dry_run" != true ]; then
-                rm "$target_path"
-                ln -s ".dotfiles/$1" "$target_path"
+                tmp_link="$target_path.dotfiles-tmp.$$"
+                ln -s ".dotfiles/$1" "$tmp_link"
+                mv -f "$tmp_link" "$target_path"
             fi
             return 0
         fi

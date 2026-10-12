@@ -5,6 +5,8 @@ colorscheme elflord         " high contrast
 syntax on                   " syntax colors
 set encoding=utf-8          " only UTF-8
 set shortmess+=I            " hide intro message
+set nomodeline              " refuse modelines (CVE-2019-12735 class)
+set modelines=0             " belt + braces
 
 " UI
 set number relativenumber   " hybrid line numbers
@@ -179,8 +181,9 @@ function! s:RenderCurrentTex() abort
 
   call mkdir(l:build, 'p')
 
-  let l:command = 'latexmk -pdf -interaction=nonstopmode '
-        \ . '-file-line-error -outdir=' . shellescape(l:build)
+  let l:command = 'latexmk -pdf -no-shell-escape '
+        \ . '-interaction=nonstopmode -file-line-error '
+        \ . '-outdir=' . shellescape(l:build)
         \ . ' ' . shellescape(l:tex)
 
   execute '!' . l:command

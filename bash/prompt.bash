@@ -10,15 +10,19 @@ COLOR_CYAN='\[\e[36m\]'
 
 # inspired by anishathalye
 machine_name() {
-    if [[ -f $HOME/.name ]]; then
-        cat $HOME/.name
+    local name
+    if [[ -f "$HOME/.name" ]] && [[ -O "$HOME/.name" ]]; then
+        read -r name < "$HOME/.name"
     elif command -v hostname >/dev/null 2>&1; then
-        hostname
+        name=$(hostname)
     elif [[ -n $HOSTNAME ]]; then
-        printf '%s\n' "$HOSTNAME"
+        name=$HOSTNAME
     else
-        printf '%s\n' unknown
+        name=unknown
     fi
+    # Strip anything but safe chars so a crafted ~/.name cannot inject
+    # terminal escapes into PS1.
+    printf '%s\n' "${name//[^A-Za-z0-9._-]/}"
 }
 
 PROMPT_DIRTRIM=3
