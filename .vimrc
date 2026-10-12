@@ -237,7 +237,16 @@ endfunction
 
 nnoremap <leader>r <Cmd>call <SID>RenderCurrentDocument()<CR>
 
-set nowritebackup
+" Keep a backup during write (survives mid-write crashes). backupcopy=yes
+" writes a copy and keeps the original inode, so another tool holding
+" the file open sees the new content via truncate+write — safer in $HOME
+" where sync daemons may be watching files.
+set writebackup
+set backupcopy=yes
+set backupdir=~/.cache/vim/backup//,.
+if !isdirectory(expand('~/.cache/vim/backup'))
+    silent! call mkdir(expand('~/.cache/vim/backup'), 'p', 0700)
+endif
 
 
 " LOCAL
