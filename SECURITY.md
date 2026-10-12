@@ -17,6 +17,57 @@ or an uncontained process running as your user with a shell open.
 
 ---
 
+## Resolution status
+
+Updated as items are addressed. See git log for the actual changes;
+hashes point to the base-repo commit that resolved the item.
+
+| ID  | Status            | Commit        | Notes |
+|-----|-------------------|---------------|-------|
+| H1  | FIXED             | `39c56e5`     | awk uses `-v drop=` instead of inlining `$1` |
+| H2  | FIXED             | `39c56e5`     | `.gitignore` is allowlist-first; denylist kept as defense-in-depth; gitleaks pre-commit/pre-push hooks wired via `core.hooksPath` |
+| H3  | FIXED             | `39c56e5`     | `set nomodeline` + `set modelines=0` in `.vimrc` |
+| M1  | FIXED             | `39c56e5`     | `source_private` now also checks parent-dir ownership and group/other-write bits |
+| M2  | FIXED             | `273deea`     | `~/.local/bin` prepended; `~/bin` appended. `~/.local/bin` chmod 0755 verified. `~/bin` does not exist on this host, so no audit needed. The "never `curl \| bash` installers" guidance is advisory and remains in this document as a recurring reminder; no code change applies. |
+| M3  | FIXED             | `39c56e5`     | tmux `set-clipboard external` |
+| M4  | FIXED             | `39c56e5`     | `plugins.bash` uses `$DOTFILES_HOME`; requires ownership before `eval`-ing dircolors |
+| M5  | FIXED             | `39c56e5`     | `umask 077` in `bash/settings.bash` |
+| M6  | FIXED             | `39c56e5`     | `HISTCONTROL=ignoredups:ignorespace:erasedups`, `HISTIGNORE` list, `HISTTIMEFORMAT` |
+| L1  | FIXED             | `39c56e5`     | `install-dev.sh` / `install-server.sh` are thin wrappers around `install-common.sh` |
+| L2  | FIXED             | `39c56e5`     | adopt path uses temp symlink + `mv -f` (atomic) |
+| L3  | FIXED             | `39c56e5`     | `latexmk -no-shell-escape` |
+| L4  | FIXED             | `39c56e5`     | `git/.config/git/config` with SSH signing on; machine key path in `~/.gitconfig.local` (set in the local-dotfiles repo). Live verification: shape OK via disposable key; real signing needs `ssh-add ~/.ssh/id_ed25519_hschoss` once per session (passphrase-protected). |
+| L5  | FIXED             | `39c56e5`     | `machine_name()` quotes `$HOME`, requires ownership of `~/.name`, strips non-`[A-Za-z0-9._-]` bytes |
+| L6  | FIXED             | `273deea`     | `writebackup` + `backupcopy=yes` + `backupdir=~/.cache/vim/backup//,.` |
+| L7  | FIXED             | `39c56e5`     | duplicate unguarded `. ~/.bashrc.local` tail removed |
+| L8  | NO LEAK (public-repo audit) | n/a | `hschoss/dotfiles-local` is public (confirmed via `gh repo view`). Full-tree audit (`git grep` for `hannes`, `schlaeptop`, `/home/<user>/`, `hschoss`) found no secrets. Only identifiers in tracked content are `hschoss` (GitHub handle — unavoidable, repo lives there) and `arch-schlaeptop` as a directory name. User explicitly chose to keep the repo public (`AskUserQuestion`, 2026-10-13). Gitleaks full-history scan on both repos: `no leaks found`. |
+
+### Operational
+
+| Task                | Status | Notes |
+|---------------------|--------|-------|
+| Install gitleaks    | DONE   | `/usr/bin/gitleaks` installed by user |
+| Run history scan    | DONE   | `gitleaks git` on both repos: `no leaks found` (18 commits base, 13 commits local) |
+| Set `user.signingkey` | DONE | `~/.gitconfig.local` → `~/.ssh/id_ed25519_hschoss.pub`; `~/.config/git/allowed_signers` populated |
+| Re-stow             | DRY-RUN SHOWN | `install-common.sh --dry-run` prints clean link for the new `git/config`; pre-existing non-symlink files in `~/.config/{gh,git}` are user-managed conflicts, resolved manually with `stow --adopt` or `rm` |
+
+### Note on `~/.local/bin` symlink mode
+
+`find ~/.local/bin -perm /o+w` reports 80 world-writable symlinks (TeX
+Live and friends). This is a Linux kernel quirk, **not** an exposure:
+
+> **man 7 symlink**: *On Linux, the permissions of a symbolic link are
+> not used in any operation; the permissions are always 0777 (read,
+> write, and execute for all user categories), and can't be changed.*
+
+`chmod -h` on ext4 is a silent no-op. The real safeguard is the parent
+directory `~/.local/bin` being 0755 and owned by `hannes` — no other
+local user has write access to it, so no entry can be created, deleted,
+or renamed by anyone else regardless of its reported mode. Verified
+with `stat` on 2026-10-13.
+
+---
+
 ## High
 
 ### H1. Command injection in `path_remove` (`shell/functions.sh:1-3`)
