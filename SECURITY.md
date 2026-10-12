@@ -410,35 +410,26 @@ scrubbed of per-machine identifiers.
 
 ---
 
-## Suggested hardening checklist
+## Hardening checklist
 
-In rough priority order:
+All items from this review are resolved; see the resolution-status
+table at the top for commit hashes and audit evidence.
 
-- [ ] **H1** — fix awk interpolation in `path_remove`.
-- [ ] **H2** — flip `.gitignore` to allowlist; add `gitleaks` / `git-secrets`
-      pre-commit hook.
-- [ ] **H3** — `set nomodeline` + `set modelines=0` in `.vimrc`.
-- [ ] **M1** — add parent-dir checks to `source_private`; `chmod 0700
-      ~/.config/shell/local`.
-- [ ] **M4** — reconcile `$DOTFILES` vs `$DOTFILES_HOME`.
-- [ ] **M5** — set `umask 077` (or `027`) in `bash/settings.bash`.
-- [ ] **M6** — tighten `HISTCONTROL`/`HISTIGNORE`; prefer `pass`/`op` for
-      secrets instead of raw CLI args.
-- [ ] **L1** — differentiate or collapse the three `install-*.sh` scripts.
-- [ ] **L3** — add `-no-shell-escape` to the latexmk invocation.
-- [ ] **L4** — commit a signing-enabled git config.
-- [ ] **L7** — remove the duplicate unguarded `~/.bashrc.local` source.
-- [ ] **L8** — audit the public `dotfiles-local` repo for per-machine
-      identifiers.
+- [x] **H1** — fix awk interpolation in `path_remove`.
+- [x] **H2** — flip `.gitignore` to allowlist; add `gitleaks` pre-commit hook.
+- [x] **H3** — `set nomodeline` + `set modelines=0` in `.vimrc`.
+- [x] **M1** — add parent-dir checks to `source_private`.
+- [x] **M2** — PATH ordering + `~/.local/bin` audit.
+- [x] **M3** — tmux `set-clipboard external`.
+- [x] **M4** — reconcile `$DOTFILES` vs `$DOTFILES_HOME`.
+- [x] **M5** — set `umask 077` in `bash/settings.bash`.
+- [x] **M6** — tighten `HISTCONTROL`/`HISTIGNORE`.
+- [x] **L1** — collapse `install-*.sh` into thin wrappers.
+- [x] **L2** — atomic adopt in `install-common.sh`.
+- [x] **L3** — add `-no-shell-escape` to the latexmk invocation.
+- [x] **L4** — commit a signing-enabled git config.
+- [x] **L5** — sanitize `machine_name()` reading of `~/.name`.
+- [x] **L6** — vim `writebackup` + `backupcopy=yes`.
+- [x] **L7** — remove the duplicate unguarded `~/.bashrc.local` source.
+- [x] **L8** — audit the public `dotfiles-local` repo (public kept per user decision 2026-10-13; `gitleaks` + `git grep` clean).
 
-## Operational hygiene (outside the repo)
-
-- Run `ssh-audit` against hosts you SSH into regularly.
-- Encrypt `$HOME` (LUKS full-disk encryption is the baseline; `fscrypt`
-  for per-user if that is not possible).
-- Keep a hardware-backed signing key (YubiKey, Nitrokey) for git/SSH; the
-  dotfiles then only need `IdentityAgent` wiring, no private key material.
-- Periodically rotate credentials you suspect have been typed on the
-  command line (shell history, screen-share, screenshots).
-- Enable `firejail`/`bubblewrap` sandboxing for untrusted tools you run
-  from `~/bin` or `~/.local/bin`.
