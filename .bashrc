@@ -55,6 +55,9 @@ source_private "$HOME/.bashrc_local_before"
 # settings
 dot_source bash/settings.bash
 
+# Use the classic GNU-readline REPL in Python so ~/.inputrc (vi mode) applies.
+export PYTHON_BASIC_REPL=1
+
 # PATH setup and external tool settings
 dot_source shell/bootstrap.sh
 dot_source shell/external.sh

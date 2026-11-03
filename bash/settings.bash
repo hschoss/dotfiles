@@ -2,7 +2,7 @@ HISTSIZE=1048576
 HISTFILE="$HOME/.bash_history"
 SAVEHIST=$HISTSIZE
 HISTCONTROL=ignoredups:ignorespace:erasedups
-HISTIGNORE='pass:*:*TOKEN*:*SECRET*:*PASSWORD*:*AWS_*:*API_KEY*:*BEARER*'
+HISTIGNORE='pass *:*TOKEN*:*SECRET*:*PASSWORD*:*AWS_*:*API_KEY*:*BEARER*'
 HISTTIMEFORMAT='%F %T '
 
 shopt -s histappend # append to history file

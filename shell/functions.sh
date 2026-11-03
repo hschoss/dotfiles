@@ -43,3 +43,37 @@ pdf2md() {
         printf 'Created: %s\n' "$md"
 }
 
+tn-passer() {
+    sudo tailscale up \
+        --login-server=https://passer.schloschi.com \
+        --accept-routes=true \
+        --accept-dns=true \
+        --force-reauth \
+        "$@"
+}
+
+tn-corvus() {
+    sudo tailscale up \
+        --login-server=https://corvus.schloschi.com \
+        --accept-routes=true \
+        --accept-dns=true \
+        --force-reauth \
+        "$@"
+}
+
+tn-down() {
+    sudo tailscale down
+}
+
+tn-status() {
+    local url
+    url=$(tailscale debug prefs 2>/dev/null | awk -F'"' '/"ControlURL"/ {print $4; exit}')
+    case "$url" in
+        *passer.schloschi.com*) printf 'tailnet: passer  (%s)\n' "$url" ;;
+        *corvus.schloschi.com*) printf 'tailnet: corvus  (%s)\n' "$url" ;;
+        '') printf 'tailnet: unknown (tailscaled not reachable)\n' ;;
+        *) printf 'tailnet: other   (%s)\n' "$url" ;;
+    esac
+    tailscale status
+}
+

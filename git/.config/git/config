@@ -15,6 +15,7 @@
 
 [fetch]
 	prune = true
+	fsckobjects = true
 
 [rerere]
 	enabled = true
@@ -36,7 +37,9 @@
 
 [transfer]
 	fsckobjects = true
-[fetch "fsckobjects"]
-	true = true
 [receive]
 	fsckObjects = true
+[user]
+	name = Hannes Schoss
+[alias]
+	ci = commit

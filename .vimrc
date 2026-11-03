@@ -143,6 +143,7 @@ nnoremap <Leader>dt a<C-r>=strftime('%Y-%m-%d %H:%M')<CR><Esc>
 nnoremap <Leader>ts a<C-r>=strftime('%Y%m%d_%H%M%S')<CR><Esc>
 
 nnoremap <Leader># <Cmd>put =repeat('#', 80)<CR>
+nnoremap <Leader>p a<C-r>=getcwd()<CR><Esc>
 
 
 

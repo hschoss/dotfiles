@@ -5,6 +5,7 @@
 #
 # Keep this list in sync with `git ls-files`.
 
+
 /*
 !/.gitignore
 !/.bash_profile
@@ -14,7 +15,7 @@
 !/.vimrc
 !/LICENSE.md
 !/README.md
-!/SECURITY.md
+SECURITY.md
 
 # Top-level directories that hold tracked files. The entries under them
 # selectively allowlist individual files.
